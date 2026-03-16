@@ -1,0 +1,29 @@
+{
+  "name": "salt-cabling-llc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+"scripts": {
+  "clean": "node -e \"const fs=require('fs'); fs.rmSync('docs',{recursive:true,force:true}); fs.mkdirSync('docs/css',{recursive:true}); fs.mkdirSync('docs/js',{recursive:true}); fs.mkdirSync('docs/images',{recursive:true});\"",
+  "build:html": "html-minifier-terser src/index.html -o docs/index.html --collapse-whitespace --remove-comments --remove-redundant-attributes --remove-script-type-attributes --remove-style-link-type-attributes --use-short-doctype --minify-css true --minify-js true",
+  "build:css": "cleancss -o docs/css/styles.min.css src/css/styles.css",
+  "build:js:min": "terser src/js/main.js -o docs/js/main.min.js -c -m",
+  "build:js:obf": "javascript-obfuscator docs/js/main.min.js --output docs/js/main.min.js --compact true --self-defending false --control-flow-flattening false --dead-code-injection false --rename-globals false",
+  "copy:images": "node -e \"const fs=require('fs'); const path=require('path'); function copyRecursive(src,dst){ fs.mkdirSync(dst,{recursive:true}); for(const entry of fs.readdirSync(src,{withFileTypes:true})){ const srcPath=path.join(src,entry.name); const dstPath=path.join(dst,entry.name); if(entry.isDirectory()){ copyRecursive(srcPath,dstPath); } else { fs.copyFileSync(srcPath,dstPath); } } } copyRecursive('src/images','docs/images');\"",
+  "build": "npm run clean && npm run build:css && npm run build:js:min && npm run build:js:obf && npm run copy:images && npm run build:html"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosephP2509/SaltCablingLLC.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JosephP2509/SaltCablingLLC/issues"
+  },
+  "homepage": "https://github.com/JosephP2509/SaltCablingLLC#readme",
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "html-minifier-terser": "^7.2.0",
+    "javascript-obfuscator": "^5.3.0",
+    "terser": "^5.46.0"
+  }
+}
